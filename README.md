@@ -7,9 +7,9 @@ Ported from [emulbreh/pyffx](https://github.com/emulbreh/pyffx).
 $key = 'hello';
 $alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
-$ffx = new \FFX\Codecs\Text($key, $alphabet, 10);
+$ffx = new \Katoni\FFX\Codecs\Text($key, $alphabet, 10);
 $ffx->encrypt('encryption'); // string: jrsunxgmbq
 
-$ffx = new \FFX\Codecs\Integer($key, 4);
+$ffx = new \Katoni\FFX\Codecs\Integer($key, 4);
 $ffx->encrypt('1234'); // int: 1867
 ```
