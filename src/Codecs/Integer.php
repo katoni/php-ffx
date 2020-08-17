@@ -1,10 +1,10 @@
 <?php
 
-namespace FFX\Codecs;
+namespace Katoni\FFX\Codecs;
 
 class Integer extends Text
 {
-    public function __construct($ffx, $length)
+    public function __construct(string $ffx, int $length)
     {
         parent::__construct($ffx, '0123456789', $length);
     }

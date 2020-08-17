@@ -1,16 +1,16 @@
 <?php
 
-namespace FFX\Codecs;
+namespace Katoni\FFX\Codecs;
 
-use FFX\FFX;
+use Katoni\FFX\FFX;
 
 abstract class Codec
 {
-    protected $ffx;
+    protected FFX $ffx;
 
-    protected $radix;
+    protected int $radix;
 
-    public function __construct($ffx, $radix)
+    public function __construct(string $ffx, int $radix)
     {
         $this->ffx = new FFX($ffx);
         $this->radix = $radix;

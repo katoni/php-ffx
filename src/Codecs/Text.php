@@ -1,6 +1,6 @@
 <?php
 
-namespace FFX\Codecs;
+namespace Katoni\FFX\Codecs;
 
 class Text extends Sequence
 {

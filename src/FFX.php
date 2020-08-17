@@ -1,6 +1,6 @@
 <?php
-// https://github.com/emulbreh/pyffx
-namespace FFX;
+
+namespace Katoni\FFX;
 
 class FFX
 {
@@ -10,16 +10,27 @@ class FFX
 
     protected $digest_size = 20;
 
-    public function __construct($key, $rounds = 10, $digestmod = 'sha1')
+    public function __construct(string $key, int $rounds = 10, string $algo = 'sha1')
     {
         $this->key = $key;
         $this->rounds = $rounds;
     }
 
-    protected function add($radix, $a, \Generator $b)
+    protected function add($radix, $a, \Generator $b): array
     {
         return array_map(function ($a) use ($b, $radix) {
             $value = gmp_strval(gmp_mod(gmp_add($a, $b->current()), $radix));
+
+            $b->next();
+
+            return $value;
+        }, $a);
+    }
+
+    protected function sub($radix, $a, $b)
+    {
+        return array_map(function ($a) use ($b, $radix) {
+            $value = gmp_strval(gmp_mod(gmp_sub($a, $b->current()), $radix));
 
             $b->next();
 
@@ -59,7 +70,7 @@ class FFX
         ];
     }
 
-    public function encrypt($radix, $v)
+    public function encrypt($radix, $v): array
     {
         list ($a, $b) = $this->split($v);
 
@@ -73,12 +84,15 @@ class FFX
 
     public function decrypt($radix, $v)
     {
-        return $v;
-    }
+        list($a, $b) = $this->split($v);
 
-    public static function integer($key, $length)
-    {
-        return new static($key);
+        for ($i = $this->rounds - 1; $i >= 0; $i--) {
+            $c = $b;
+            $b = $a;
+            $a = $this->sub($radix, $c, $this->round($radix, $i, $b));
+        }
+
+        return array_merge($a, $b);
     }
 }
 
@@ -86,9 +100,6 @@ function divmod($a, $b)
 {
     $remainder = gmp_mod($a, $b);
     $quotient = gmp_div(gmp_sub($a, $remainder), $b);
-
-    /*$remainder = $a % $b;
-    $quotient = ($a - $remainder) / $b;*/
 
     return [$quotient, $remainder];
 }

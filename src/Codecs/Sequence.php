@@ -1,19 +1,22 @@
 <?php
 
-namespace FFX\Codecs;
+namespace Katoni\FFX\Codecs;
+
+use InvalidArgumentException;
+use Katoni\FFX\FFX;
 
 class Sequence extends Codec
 {
-    protected $alphabet;
+    protected string $alphabet;
 
     protected $pack_map;
 
-    protected $length;
+    protected int $length;
 
-    public function __construct($ffx, $alphabet, $length)
+    public function __construct(string $ffx, string $alphabet, int $length)
     {
         $this->alphabet = $alphabet;
-        $this->pack_map = array_flip(str_split($alphabet)); // {c: i for i, c in enumerate(alphabet)}
+        $this->pack_map = array_flip(str_split($alphabet));
         $this->length = $length;
 
         parent::__construct($ffx, strlen($alphabet));
@@ -22,20 +25,20 @@ class Sequence extends Codec
     public function pack($v)
     {
         if (strlen($v) !== $this->length) {
-            throw new \InvalidArgumentException(sprintf('Sequence length must be %s', $this->length));
+            throw new InvalidArgumentException(sprintf('Sequence length must be %s', $this->length));
         }
 
-        try {
-            $result = [];
+        $result = [];
 
-            foreach (str_split($v) as $c) {
-                $result[] = $this->pack_map[$c];
+        foreach (str_split($v) as $c) {
+            if (!array_key_exists($c, $this->pack_map)) {
+                throw new InvalidArgumentException(sprintf('Non-alphabet character: %s', $c));
             }
 
-            return $result; // [self.pack_map[c] for c in v]
-        } catch (\Exception $e) {
-
+            $result[] = $this->pack_map[$c];
         }
+
+        return $result;
     }
 
     public function unpack($v, $t)
@@ -47,7 +50,5 @@ class Sequence extends Codec
         }
 
         return $result;
-
-        // return t($this->alphabet[$i] for i in v)
     }
 }
