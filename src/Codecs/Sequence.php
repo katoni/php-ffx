@@ -3,15 +3,14 @@
 namespace Katoni\FFX\Codecs;
 
 use InvalidArgumentException;
-use Katoni\FFX\FFX;
 
 class Sequence extends Codec
 {
-    protected string $alphabet;
+    protected $alphabet;
 
     protected $pack_map;
 
-    protected int $length;
+    protected $length;
 
     public function __construct(string $ffx, string $alphabet, int $length)
     {

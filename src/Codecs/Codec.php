@@ -6,9 +6,9 @@ use Katoni\FFX\FFX;
 
 abstract class Codec
 {
-    protected FFX $ffx;
+    protected $ffx;
 
-    protected int $radix;
+    protected $radix;
 
     public function __construct(string $ffx, int $radix)
     {
