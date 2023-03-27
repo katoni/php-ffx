@@ -11,7 +11,7 @@ class Integer extends Text
 
     public function pack($v)
     {
-        return parent::pack(str_pad($v, $this->length, 0, STR_PAD_LEFT));
+        return parent::pack(str_pad($v, $this->length, '0', STR_PAD_LEFT));
     }
 
     public function unpack($v, $t)
