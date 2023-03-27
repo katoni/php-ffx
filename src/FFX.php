@@ -62,7 +62,7 @@ class FFX
 
     protected function split($v): array
     {
-        $s = (int) count($v) / 2;
+        $s = (int) (count($v) / 2);
 
         return [
             array_slice($v, 0, $s),
